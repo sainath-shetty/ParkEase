@@ -57,7 +57,6 @@ const useParkingBill = () => {
                 enterTime: new Date().toString(),
             });
             if (response.data.timeEntered) {
-                // Exit scan — vehicle was parked, generate the bill
                 setNumPlate(response.data.numPlate);
                 const date1 = new Date();
                 setExitTime(date1.toString());
@@ -68,7 +67,6 @@ const useParkingBill = () => {
                 setDuration(durationInMinutes.toFixed(2));
                 setScanStatus('bill_ready');
             } else {
-                // Entry scan — vehicle registered for the first time or re-entry
                 setNumPlate(plate);
                 setScanStatus('entry_registered');
             }
@@ -78,6 +76,8 @@ const useParkingBill = () => {
             setErrorMessage(
                 'Could not reach the server. Make sure the backend is running and REACT_APP_API_URL is set correctly.'
             );
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -92,8 +92,7 @@ const useParkingBill = () => {
             },
         }).then(({ data: { text } }) => {
             setText(text);
-            setIsLoading(false);
-            sendRequest(text);
+            sendRequest(text); // isLoading stays true until sendRequest finishes
         });
     };
 
