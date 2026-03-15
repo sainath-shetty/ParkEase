@@ -6,23 +6,19 @@ import axios from 'axios';
 const normalizePlate = (raw) => {
     const cleaned = raw.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
 
-    // 1. Standard state plate: MH12AB1234 (most common)
-    //    2 letters + 2 digits + 1-3 letters + 4 digits
+    // 1. Standard state plate: MH12AB1234
     const standard = cleaned.match(/[A-Z]{2}\d{2}[A-Z]{1,3}\d{4}/);
     if (standard) return standard[0];
 
     // 2. BH (Bharat) series: 22BH0001AA
-    //    2 digits + BH + 4 digits + 2 letters
     const bh = cleaned.match(/\d{2}BH\d{4}[A-Z]{2}/);
     if (bh) return bh[0];
 
     // 3. Older plates with single-digit district code: DL1CAB1234
-    //    2 letters + 1 digit + 1-3 letters + 4 digits
     const older = cleaned.match(/[A-Z]{2}\d[A-Z]{1,3}\d{4}/);
     if (older) return older[0];
 
-    // Fallback: return full cleaned string
-    return cleaned;
+    return null; // No valid plate pattern found
 };
 
 const useParkingBill = () => {
@@ -51,6 +47,13 @@ const useParkingBill = () => {
 
     const sendRequest = async (recognizedText) => {
         const plate = normalizePlate(recognizedText);
+
+        if (!plate) {
+            setScanStatus('error');
+            setErrorMessage('No number plate found in the image.');
+            setIsLoading(false);
+            return;
+        }
         try {
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/vehicle/enter`, {
                 numPlate: plate,

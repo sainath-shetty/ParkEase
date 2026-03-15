@@ -40,7 +40,7 @@ const NumberToText = () => {
 
                 {isLoading && <LoadingCard progress={progress} />}
 
-                {!isLoading && text && (
+                {!isLoading && scanStatus !== 'idle' && (
                     <div className="abs-card bill-card">
                         <ParkingTicket
                             numplate={numplate}

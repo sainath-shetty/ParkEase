@@ -1,4 +1,5 @@
 import React from 'react';
+import StatusCard from './StatusCard';
 
 const formatDate = (dateStr) => {
     if (!dateStr) return '—';
@@ -10,27 +11,29 @@ const formatDate = (dateStr) => {
 
 const ParkingTicket = ({ numplate, entryTime, exitTime, duration, charge, scanStatus, errorMessage, onReset }) => {
 
-    // Backend unreachable or server error
+    // Backend unreachable or no plate detected
     if (scanStatus === 'error') {
         return (
-            <div className="no-record">
-                <div className="no-record-icon">&#10060;</div>
-                <h3>Connection Error</h3>
-                <p>{errorMessage}</p>
-                <button className="abs-btn abs-btn-secondary" onClick={onReset}>Try Again</button>
-            </div>
+            <StatusCard
+                icon="&#10060;"
+                title="No Number Plate Found"
+                message={errorMessage}
+                buttonLabel="Try Again"
+                onAction={onReset}
+            />
         );
     }
 
     // First scan — vehicle entry registered
     if (scanStatus === 'entry_registered') {
         return (
-            <div className="no-record">
-                <div className="no-record-icon">&#9989;</div>
-                <h3>Entry Registered</h3>
-                <p>Vehicle <strong>{numplate}</strong> has been checked in. Scan the same plate again on exit to generate the bill.</p>
-                <button className="abs-btn abs-btn-secondary" onClick={onReset}>Scan Another Vehicle</button>
-            </div>
+            <StatusCard
+                icon="&#9989;"
+                title="Entry Registered"
+                message={`Vehicle ${numplate} has been checked in. Scan the same plate again on exit to generate the bill.`}
+                buttonLabel="Scan Another Vehicle"
+                onAction={onReset}
+            />
         );
     }
 

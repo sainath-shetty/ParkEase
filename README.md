@@ -119,6 +119,12 @@ The app runs at `http://localhost:3000`.
 
 ---
 
+### Number plate Not Found
+
+> If a random image is passed without a number plate instead of assigning random values it throws an error that "No Number plate Found"
+
+![No number plate found](./Assets/number_plate_not_found.png)
+
 ## Project Structure
 
 ```
