@@ -2,8 +2,6 @@
 
 const Plate = require("../model/NumberModel");
 
-
-
 exports.addEntry = async (req, res) => {
     try {
         const value = req.body;

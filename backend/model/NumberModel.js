@@ -10,4 +10,4 @@ const numberSchema = new mongoose.Schema({
 
 });
 
-module.exports = mongoose.model('User', numberSchema);
+module.exports = mongoose.model('Plate', numberSchema);
